@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<style type="text/css">
+		body{
+			background-color: black;
+			color: #ffffff;
+		}
+		#title{
+			font-size:80px;
+			text-align: center;
+			margin-top: 90px;
+			color:yellow;
+		}
+		
+		#container{		
+			flex-direction: column;	
+			display:flex;
+			height:80vh;
+			justify-content: center;
+			align-items: center;
+			text-align: center;
+		}
+		#displayLocation{
+			font-size: 30px;		
+		}
+		#temperature{
+			font-size: 60px;
+		}
+		#button{
+			border:none;
+			font-size: 15px;
+			color:#ffffff;
+			background-color: black;
+		}
+		
+		
+	</style>
+</head>
+<body>
+	<div id="title">WEATHER APP</div>
+	<div id="container">	
+		<div id="child">
+			<div id="displayLocation"></div>
+			<div id="temperature">
+				<span id="temp"></span>
+				
+			</div>
+			<div id="desc"></div>
+			<div id="displayIcon"></div>
+		</div>
+	</div>
+	<script type="text/javascript">
+		let latitude;
+		let longitude;
+		let button;
+		let displayLocation = document.getElementById("displayLocation");
+		let temp = document.getElementById("temp");
+		let displayIcon = document.getElementById("displayIcon");
+		let desc = document.getElementById("desc");
+
+
+		function display(response){
+			console.log(response);
+			displayLocation.innerHTML = `${response.name}, ${response.sys.country}`;
+			let temperature = (response.main.temp-273).toFixed(2);
+			temp.innerHTML = `<span>${temperature}</span><span><sup> o</sup><button id="button" style="font-size:60px">C</button></span>`;
+			displayIcon.innerHTML = `<img src="http://openweathermap.org/img/w/${response.weather[0].icon}.png" alt="icon" width="62" height="62">`;
+			desc.innerHTML = `${response.weather[0].main}`;
+			button = document.getElementById("button");
+			button.addEventListener("click", (e)=>{
+				let target = e.target.textContent;
+				console.log(target);
+				console.log(e.target.parentNode.previousElementSibling.textContent);
+				let t = e.target.parentNode.previousElementSibling.textContent;
+				if(target==="C"){
+					temperature = (t*(9/5))+32;
+					e.target.parentNode.previousElementSibling.textContent = temperature.toFixed(2);
+					e.target.textContent = "F";
+				}
+				if(target==="F"){
+					temperature = (t-32)*(5/9);
+					e.target.parentNode.previousElementSibling.textContent = temperature.toFixed(2);
+					e.target.textContent = "C";
+				}
+
+			});
+
+
+		}
+		function getLocation() {
+		  if (navigator.geolocation) {
+		    navigator.geolocation.getCurrentPosition(showPosition);
+		  } else { 
+		    displayLocation.innerHTML = "Geolocation is not supported by this browser.";
+		  }
+		}
+
+		function showPosition(position) {
+			  latitude = position.coords.latitude;
+			  longitude = position.coords.longitude;
+			  let key = "5e8e74b5702c2827f1731c2ee7d8099f";
+			  console.log(latitude);
+			  console.log(longitude);
+			  fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${key}`
+			  ).then(function(response){
+				return response.json();
+
+			  }).then(display)
+			  .catch(function() {
+					console.log("Error");
+			  });
+		}
+		
+		getLocation();
+
+		
+		
+		
+		
+	</script>
+
+</body>
+</html>
