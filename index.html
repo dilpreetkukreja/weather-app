@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title></title>
+	<title>Weather App</title>
+	<link href="https://fonts.googleapis.com/css?family=Dancing+Script&display=swap" rel="stylesheet">
 	<style type="text/css">
 		body{
 			background-color: black;
@@ -12,12 +13,15 @@
 			text-align: center;
 			margin-top: 90px;
 			color:yellow;
+			font-family: 'Dancing Script', cursive;
+			margin-top:120px;
 		}
 		
 		#container{		
+			margin-top: 30px;
 			flex-direction: column;	
 			display:flex;
-			height:80vh;
+			height:40vh;
 			justify-content: center;
 			align-items: center;
 			text-align: center;
@@ -66,7 +70,7 @@
 			displayLocation.innerHTML = `${response.name}, ${response.sys.country}`;
 			let temperature = (response.main.temp-273).toFixed(2);
 			temp.innerHTML = `<span>${temperature}</span><span><sup> o</sup><button id="button" style="font-size:60px">C</button></span>`;
-			displayIcon.innerHTML = `<img src="http://openweathermap.org/img/w/${response.weather[0].icon}.png" alt="icon" width="62" height="62">`;
+			displayIcon.innerHTML = `<img src="http://openweathermap.org/img/w/${response.weather[0].icon}.png" alt="icon" width="92" height="92">`;
 			desc.innerHTML = `${response.weather[0].main}`;
 			button = document.getElementById("button");
 			button.addEventListener("click", (e)=>{
